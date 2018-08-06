@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/tokopedia/megazord/go/ali-image-overwriter/config"
-	"github.com/tokopedia/megazord/go/ali-image-overwriter/ecs"
-	"github.com/tokopedia/megazord/go/ali-image-overwriter/ess"
+	"github.com/rifki192/alicloud-image-overwriter/config"
+	"github.com/rifki192/alicloud-image-overwriter/ecs"
+	"github.com/rifki192/alicloud-image-overwriter/ess"
 )
 
 func main() {
@@ -17,7 +17,6 @@ func main() {
 	flagNewName := flag.String("newname", "", "New Image Name")
 	flagDeleteOld := flag.Bool("deleteold", false, "Delete Old Image")
 	flag.Parse()
-	fmt.Println(flag.Args())
 
 	if *flagNewName == "" {
 		fmt.Println("Please provide new image name with --newname")
