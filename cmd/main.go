@@ -104,18 +104,22 @@ func imagesCommand(cfg *config.Config) {
 	fmt.Printf("All feature using image %s (%s) has been replaced to use image %s (%s) \n", *flagOldName, oldImageID, *flagNewName, newImageID)
 
 	fmt.Println("Change new image name, to become old image name")
-	err = ecsClient.ChangeImageName(oldImageID, *flagOldName+"tmp")
-	if err != nil {
-		fmt.Printf("Error while change old image name %v \n", err)
-		os.Exit(1)
+
+	if oldImageID != "" {
+		err = ecsClient.ChangeImageName(oldImageID, *flagOldName+"tmp")
+		if err != nil {
+			fmt.Printf("Error while change old image name %v \n", err)
+			os.Exit(1)
+		}
 	}
+
 	err = ecsClient.ChangeImageName(newImageID, *flagOldName)
 	if err != nil {
 		fmt.Printf("Error while change new image name %v \n", err)
 		os.Exit(1)
 	}
 
-	if *flagDeleteOld {
+	if *flagDeleteOld && oldImageID != "" {
 		fmt.Println("Delete Old Image Defined, will delete old image...")
 		err = ecsClient.DeleteImageByID(oldImageID)
 		if err != nil {
