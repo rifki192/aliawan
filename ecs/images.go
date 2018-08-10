@@ -34,6 +34,7 @@ func (c *Client) DeleteImageByID(imageID string) error {
 	response := ecs.CreateDeleteImageResponse()
 
 	request.ImageId = imageID
+	request.Force = requests.NewBoolean(true)
 	response, err = c.client.DeleteImage(request)
 	if err != nil {
 		// Handle exceptions
@@ -41,6 +42,24 @@ func (c *Client) DeleteImageByID(imageID string) error {
 	}
 	if response.IsSuccess() {
 		fmt.Printf("Image with ID %s, has been deleted.\n", imageID)
+	}
+	return nil
+}
+
+func (c *Client) ChangeImageName(imageID string, imageName string) error {
+	var err error
+	request := ecs.CreateModifyImageAttributeRequest()
+	response := ecs.CreateModifyImageAttributeResponse()
+
+	request.ImageId = imageID
+	request.ImageName = imageName
+	response, err = c.client.ModifyImageAttribute(request)
+	if err != nil {
+		// Handle exceptions
+		return fmt.Errorf("could not send request to alibaba: %s", err)
+	}
+	if response.IsSuccess() {
+		fmt.Printf("Image with ID %s, has been renamed to %s.\n", imageID, imageName)
 	}
 	return nil
 }

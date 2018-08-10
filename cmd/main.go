@@ -3,20 +3,81 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/rifki192/alicloud-image-overwriter/config"
 	"github.com/rifki192/alicloud-image-overwriter/ecs"
 	"github.com/rifki192/alicloud-image-overwriter/ess"
+	"github.com/rifki192/alicloud-image-overwriter/slb"
 )
 
 func main() {
+	if len(os.Args[1:]) < 1 {
+		fmt.Println("Please provide at least one argument, to see available argument just type -h argument")
+		os.Exit(1)
+	}
+
+	fmt.Println("=================================================")
+	fmt.Println("======    ALIBABA CLOUD CLI WRAPPER      ========")
+	fmt.Println("======  another un-official alicloud-cli ========")
+	fmt.Println("======     for simplify your task        ========")
+	fmt.Println("=================================================")
+	fmt.Println()
+
+	cfg := config.LoadConfig()
+
+	switch args := os.Args; args[1] {
+	case "images":
+		//imagesCommand
+		imagesCommand(cfg)
+	case "slb":
+		//slbCommand
+		slbCommand(cfg)
+	default:
+		fmt.Printf("%s. not defined please see help", args[1])
+	}
+
+	fmt.Println()
+	os.Exit(0)
+}
+
+func slbCommand(cfg *config.Config) {
+	var err error
+	// Subcommands
+	slbCmd := flag.NewFlagSet("slb", flag.ExitOnError)
+
+	flagVGroups := slbCmd.String("vgroupname", "", "VServer Groups Name")
+	flagInstanceID := slbCmd.String("instanceid", "", "Instance ID to be added to Vserver Group SLB")
+	slbCmd.Parse(os.Args[2:])
+
+	if *flagVGroups == "" {
+		fmt.Println("Please provide VGroup Name with --vgroupname")
+		os.Exit(1)
+	}
+
+	if *flagInstanceID == "" {
+		fmt.Println("Please provide instanceID with --instanceID")
+		os.Exit(1)
+	}
+
+	slbClient := slb.New(cfg)
+	err = slbClient.AddInstanceToVServerGroup(*flagVGroups, *flagInstanceID)
+	if err != nil {
+		log.Printf("could not send request AddVServerGroupBackendServers to alibaba: %s", err)
+		os.Exit(1)
+	}
+}
+
+func imagesCommand(cfg *config.Config) {
 	var err error
 
-	flagOldName := flag.String("oldname", "", "Old Image Name")
-	flagNewName := flag.String("newname", "", "New Image Name")
-	flagDeleteOld := flag.Bool("deleteold", false, "Delete Old Image")
-	flag.Parse()
+	imagesCmd := flag.NewFlagSet("images", flag.ExitOnError)
+
+	flagOldName := imagesCmd.String("oldname", "", "Old Image Name")
+	flagNewName := imagesCmd.String("newname", "", "New Image Name")
+	flagDeleteOld := imagesCmd.Bool("deleteold", false, "Delete Old Image")
+	imagesCmd.Parse(os.Args[2:])
 
 	if *flagNewName == "" {
 		fmt.Println("Please provide new image name with --newname")
@@ -27,15 +88,6 @@ func main() {
 		fmt.Println("Please provide old image name with --oldname")
 		os.Exit(1)
 	}
-
-	fmt.Println("=============================================")
-	fmt.Println("======ALIBABA CLOUD IMAGES OVERWRITER========")
-	fmt.Println("======  for replacing image used by  ========")
-	fmt.Println("======  any resources on ali cloud   ========")
-	fmt.Println("=============================================")
-	fmt.Println()
-
-	cfg := config.LoadConfig()
 
 	ecsClient := ecs.New(cfg)
 	oldImageID := ecsClient.GetImageIdByName(*flagOldName)
@@ -49,15 +101,26 @@ func main() {
 		fmt.Printf("Error while replacing scaling group config %v \n", err)
 		os.Exit(1)
 	}
-	fmt.Println("All feature using image %s (%s) has been replaced to use image %s (%s)", *flagOldName, oldImageID, *flagNewName, newImageID)
+	fmt.Printf("All feature using image %s (%s) has been replaced to use image %s (%s) \n", *flagOldName, oldImageID, *flagNewName, newImageID)
+
+	fmt.Println("Change new image name, to become old image name")
+	err = ecsClient.ChangeImageName(oldImageID, *flagOldName+"tmp")
+	if err != nil {
+		fmt.Printf("Error while change old image name %v \n", err)
+		os.Exit(1)
+	}
+	err = ecsClient.ChangeImageName(newImageID, *flagOldName)
+	if err != nil {
+		fmt.Printf("Error while change new image name %v \n", err)
+		os.Exit(1)
+	}
 
 	if *flagDeleteOld {
 		fmt.Println("Delete Old Image Defined, will delete old image...")
 		err = ecsClient.DeleteImageByID(oldImageID)
-		fmt.Printf("Error while deleting old image %v \n", err)
-		os.Exit(1)
+		if err != nil {
+			fmt.Printf("Error while deleting old image %v \n", err)
+			os.Exit(1)
+		}
 	}
-
-	fmt.Println()
-	os.Exit(0)
 }

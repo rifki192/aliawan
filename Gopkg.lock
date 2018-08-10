@@ -14,7 +14,8 @@
     "sdk/responses",
     "sdk/utils",
     "services/ecs",
-    "services/ess"
+    "services/ess",
+    "services/slb"
   ]
   revision = "73d3ff1a498e09d0949b29a794746f324ab51883"
   version = "1.24.3"
@@ -58,6 +59,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "9f8ae4ff8157a1e0f62874f36037b04393777d3bf814f1766992840800ec3f16"
+  inputs-digest = "5284f5f3c26aaebb2991ea1c825ec054eaff810c21ea9288f2e1b068026c03b5"
   solver-name = "gps-cdcl"
   solver-version = 1
