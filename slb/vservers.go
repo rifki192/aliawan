@@ -45,13 +45,14 @@ func getVServerGroupsIdByVServerName(c *Client, vServerName string) []string {
 		}
 	}
 
+	fmt.Printf("Found %d vservergroup with name %s\n", string(len(Vservers)), vServerName)
+	fmt.Println(Vservers)
+
 	return Vservers
 }
 
 func (c *Client) AddInstanceToVServerGroup(vServerName string, instanceID string) error {
 	var err error
-	var backendServer BackendServer
-	var backendServers []BackendServer
 
 	request := slb.CreateAddVServerGroupBackendServersRequest()
 	response := slb.CreateAddVServerGroupBackendServersResponse()
@@ -59,6 +60,8 @@ func (c *Client) AddInstanceToVServerGroup(vServerName string, instanceID string
 	vServerGroups := getVServerGroupsIdByVServerName(c, vServerName)
 
 	for _, vg := range vServerGroups {
+		var backendServer BackendServer
+		var backendServers []BackendServer
 		request.VServerGroupId = vg
 		backendServer.ServerId = instanceID
 		backendServer.Port = Port

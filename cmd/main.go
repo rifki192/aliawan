@@ -56,15 +56,16 @@ func slbCommand(cfg *config.Config) {
 		os.Exit(1)
 	}
 
+	ecsClient := ecs.New(cfg)
+
 	if *flagInstanceID == "" {
-		fmt.Println("Please provide instanceID with --instanceID")
-		os.Exit(1)
+		*flagInstanceID = ecsClient.GetInstanceID()
 	}
 
 	slbClient := slb.New(cfg)
 	err = slbClient.AddInstanceToVServerGroup(*flagVGroups, *flagInstanceID)
 	if err != nil {
-		log.Printf("could not send request AddVServerGroupBackendServers to alibaba: %s", err)
+		log.Printf("could not send request AddVServerGroupBackendServers to alibaba: %v\n", err)
 		os.Exit(1)
 	}
 }

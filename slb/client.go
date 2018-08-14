@@ -1,6 +1,8 @@
 package slb
 
 import (
+	"fmt"
+
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/slb"
 	"github.com/rifki192/alicloud-image-overwriter/config"
@@ -16,14 +18,24 @@ type Client struct {
 
 func New(cfg *config.Config) *Client {
 	var c Client
-	config := sdk.NewConfig()
+	var err error
+	var slbClient *slb.Client
 
-	credential := &credentials.BaseCredential{
-		AccessKeyId:     cfg.AccesKey,
-		AccessKeySecret: cfg.SecretKey,
+	conf := sdk.NewConfig()
+
+	if cfg.AccesKey == "" {
+		fmt.Println("Load apps with Sts Credential")
+		stsCred := config.GetStsCredentials()
+		slbClient, err = slb.NewClientWithStsToken(stsCred.Region, stsCred.AccessKey, stsCred.SecretKey, stsCred.StsToken)
+	} else {
+		fmt.Println("Load apps with Env Credential")
+		credential := &credentials.BaseCredential{
+			AccessKeyId:     cfg.AccesKey,
+			AccessKeySecret: cfg.SecretKey,
+		}
+		slbClient, err = slb.NewClientWithOptions(cfg.Region, conf, credential)
 	}
 
-	slbClient, err := slb.NewClientWithOptions(cfg.Region, config, credential)
 	if err != nil {
 		// Handle exceptions
 		panic(err)
