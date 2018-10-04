@@ -42,7 +42,7 @@ func getVServerGroupsIdByVServerName(c *Client, vServerName string) []string {
 		response, err = c.client.DescribeVServerGroups(request)
 		if err != nil {
 			// Handle exceptions
-			log.Printf("could not send request DescribeLoadBalancers to alibaba: %s", err)
+			log.Printf("could not send request DescribeVServerGroups to alibaba: %s", err)
 			os.Exit(1)
 		}
 		for _, vs := range response.VServerGroups.VServerGroup {
@@ -53,7 +53,7 @@ func getVServerGroupsIdByVServerName(c *Client, vServerName string) []string {
 		}
 	}
 
-	fmt.Printf("Found %d vservergroup with name %s\n", string(len(Vservers)), vServerName)
+	fmt.Printf("Found %d vservergroup with name %s\n", len(Vservers), vServerName)
 	fmt.Println(Vservers)
 
 	return Vservers
