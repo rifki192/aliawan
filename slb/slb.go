@@ -18,6 +18,8 @@ func getAllSLBs(c *Client) []string {
 
 	// Set the request.PageSize
 	request.PageSize = requests.NewInteger(pageSize)
+	request.Domain = "slb.aliyuncs.com"
+
 	totalPages := 1
 	for i := 1; i <= totalPages; i++ {
 		request.PageNumber = requests.NewInteger(int(i))
