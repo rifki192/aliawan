@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/slb"
 )
@@ -29,23 +30,30 @@ func getVServerGroupsIdByVServerName(c *Client, vServerName string) []string {
 
 	AllSLBs := getAllSLBs(c)
 
+	// Create look-up hash table to check if a vServerName exists
+	vServerNames := make(map[string]bool)
+	vServerNameList := strings.Split(vServerName, ",")
+	for _, name := range vServerNameList {
+		vServerNames[name] = true
+	}
+
 	for _, slbId := range AllSLBs {
 		request.LoadBalancerId = slbId
 		response, err = c.client.DescribeVServerGroups(request)
 		if err != nil {
 			// Handle exceptions
-			log.Printf("could not send request DescribeLoadBalancers to alibaba: %s", err)
+			log.Printf("could not send request DescribeVServerGroups to alibaba: %s", err)
 			os.Exit(1)
 		}
 		for _, vs := range response.VServerGroups.VServerGroup {
-			if vs.VServerGroupName == vServerName {
+			if vServerNames[vs.VServerGroupName] {
 				Vservers = append(Vservers, vs.VServerGroupId)
 			}
 
 		}
 	}
 
-	fmt.Printf("Found %d vservergroup with name %s\n", string(len(Vservers)), vServerName)
+	fmt.Printf("Found %d vservergroup with name %s\n", len(Vservers), vServerName)
 	fmt.Println(Vservers)
 
 	return Vservers

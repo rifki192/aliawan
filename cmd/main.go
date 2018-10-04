@@ -6,10 +6,10 @@ import (
 	"log"
 	"os"
 
-	"github.com/rifki192/alicloud-image-overwriter/config"
-	"github.com/rifki192/alicloud-image-overwriter/ecs"
-	"github.com/rifki192/alicloud-image-overwriter/ess"
-	"github.com/rifki192/alicloud-image-overwriter/slb"
+	"github.com/williamchanrico/alicloud-image-overwriter/config"
+	"github.com/williamchanrico/alicloud-image-overwriter/ecs"
+	"github.com/williamchanrico/alicloud-image-overwriter/ess"
+	"github.com/williamchanrico/alicloud-image-overwriter/slb"
 )
 
 func main() {
@@ -21,7 +21,7 @@ func main() {
 	fmt.Println("=================================================")
 	fmt.Println("======    ALIBABA CLOUD CLI WRAPPER      ========")
 	fmt.Println("======  another un-official alicloud-cli ========")
-	fmt.Println("======     for simplify your task        ========")
+	fmt.Println("======      to simplify your task        ========")
 	fmt.Println("=================================================")
 	fmt.Println()
 
@@ -65,7 +65,7 @@ func slbCommand(cfg *config.Config) {
 	slbClient := slb.New(cfg)
 	err = slbClient.AddInstanceToVServerGroup(*flagVGroups, *flagInstanceID)
 	if err != nil {
-		log.Printf("could not send request AddVServerGroupBackendServers to alibaba: %v\n", err)
+		log.Printf("could not send request AddInstanceToVServerGroup to alibaba: %v\n", err)
 		os.Exit(1)
 	}
 }
