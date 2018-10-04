@@ -6,10 +6,10 @@ import (
 	"log"
 	"os"
 
-	"github.com/williamchanrico/alicloud-image-overwriter/config"
-	"github.com/williamchanrico/alicloud-image-overwriter/ecs"
-	"github.com/williamchanrico/alicloud-image-overwriter/ess"
-	"github.com/williamchanrico/alicloud-image-overwriter/slb"
+	"github.com/williamchanrico/aliawan/config"
+	"github.com/williamchanrico/aliawan/ecs"
+	"github.com/williamchanrico/aliawan/ess"
+	"github.com/williamchanrico/aliawan/slb"
 )
 
 func main() {
