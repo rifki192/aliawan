@@ -6,10 +6,10 @@ import (
 	"log"
 	"os"
 
-	"github.com/rifki192/alicloud-image-overwriter/config"
-	"github.com/rifki192/alicloud-image-overwriter/ecs"
-	"github.com/rifki192/alicloud-image-overwriter/ess"
-	"github.com/rifki192/alicloud-image-overwriter/slb"
+	"github.com/williamchanrico/alicloud-image-overwriter/config"
+	"github.com/williamchanrico/alicloud-image-overwriter/ecs"
+	"github.com/williamchanrico/alicloud-image-overwriter/ess"
+	"github.com/williamchanrico/alicloud-image-overwriter/slb"
 )
 
 func main() {
@@ -21,7 +21,7 @@ func main() {
 	fmt.Println("=================================================")
 	fmt.Println("======    ALIBABA CLOUD CLI WRAPPER      ========")
 	fmt.Println("======  another un-official alicloud-cli ========")
-	fmt.Println("======     for simplify your task        ========")
+	fmt.Println("======      to simplify your task        ========")
 	fmt.Println("=================================================")
 	fmt.Println()
 
