@@ -3,7 +3,6 @@ package slb
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"os"
 	"strings"
 
@@ -42,7 +41,7 @@ func getVServerGroupsIdByVServerName(c *Client, vServerName string) []string {
 		response, err = c.client.DescribeVServerGroups(request)
 		if err != nil {
 			// Handle exceptions
-			log.Printf("could not send request DescribeVServerGroups to alibaba: %s", err)
+			fmt.Printf("could not send request DescribeVServerGroups to alibaba: %s", err)
 			os.Exit(1)
 		}
 		for _, vs := range response.VServerGroups.VServerGroup {
@@ -75,8 +74,9 @@ func (c *Client) AddInstanceToVServerGroup(vServerName string, instanceID string
 		backendServer.Port = Port
 		backendServer.Weight = Weight
 		backendServers = append(backendServers, backendServer)
-		sJson, _ := json.Marshal(backendServers)
-		request.BackendServers = string(sJson)
+		sJSON, _ := json.Marshal(backendServers)
+		request.BackendServers = string(sJSON)
+		fmt.Printf("Adding this backend server:\n%v", request.BackendServers)
 		response, err = c.client.AddVServerGroupBackendServers(request)
 		if err != nil {
 			return err

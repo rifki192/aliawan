@@ -5,8 +5,6 @@ import (
 	"math"
 	"os"
 
-	"log"
-
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/ess"
 )
@@ -26,7 +24,7 @@ func (c *Client) ReplaceScalingConfigurationsWithImageId(oldImageID string, newI
 		err := changeScalingGroupImageID(c, item, newImageID)
 		if err != nil {
 			// Handle exceptions
-			log.Printf("could not send request to alibaba: %s", err)
+			fmt.Printf("could not send request to alibaba: %s", err)
 			os.Exit(1)
 		}
 	}
@@ -67,7 +65,7 @@ func getScalingConfigurationsByImageID(c *Client, imageId string) []string {
 		response, err = c.client.DescribeScalingConfigurations(request)
 		if err != nil {
 			// Handle exceptions
-			log.Printf("could not send request to alibaba: %s", err)
+			fmt.Printf("could not send request to alibaba: %s", err)
 			os.Exit(1)
 		}
 		totalInstances := response.TotalCount

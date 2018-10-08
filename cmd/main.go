@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 	"os"
 	"os/exec"
 
@@ -93,7 +92,7 @@ func slbCommand(cfg *config.Config) {
 	slbClient := slb.New(cfg)
 	err = slbClient.AddInstanceToVServerGroup(*flagVGroups, *flagInstanceID)
 	if err != nil {
-		log.Printf("could not send request AddInstanceToVServerGroup to alibaba: %v\n", err)
+		fmt.Printf("could not send request AddInstanceToVServerGroup to alibaba: %v\n", err)
 		os.Exit(1)
 	}
 }

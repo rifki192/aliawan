@@ -2,7 +2,6 @@ package ecs
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/requests"
@@ -18,7 +17,7 @@ func (c *Client) GetImageIdByName(imageName string) string {
 	response, err := c.client.DescribeImages(request)
 	if err != nil {
 		// Handle exceptions
-		log.Printf("could not send request to alibaba: %s", err)
+		fmt.Printf("could not send request to alibaba: %s", err)
 		os.Exit(1)
 	}
 	if len(response.Images.Image) > 0 {
