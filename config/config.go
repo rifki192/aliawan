@@ -45,11 +45,13 @@ func GetStsCredentials() *StsCred {
 
 	respSts := GetHttpCall(Credentials_URL)
 	json.Unmarshal([]byte(respSts), &sts)
-	fmt.Println("Got Credentials with key : ", sts.AccessKey)
+	fmt.Println("Got Credentials with AccessKey: ", sts.AccessKey)
+	// fmt.Println("Got Credentials with SecretKey: ", sts.SecretKey)
+	// fmt.Println("Got Credentials with StsToken: ", sts.StsToken)
 
 	respRegion := GetHttpCall(RegionId_URL)
 	sts.Region = respRegion
-	fmt.Println("Got Region : ", sts.Region)
+	fmt.Println("Got Credentials with Region: ", sts.Region)
 
 	return sts
 }

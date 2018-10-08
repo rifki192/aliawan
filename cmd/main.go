@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 
 	"github.com/williamchanrico/aliawan/config"
 	"github.com/williamchanrico/aliawan/ecs"
@@ -25,6 +26,11 @@ func main() {
 	fmt.Println("=================================================")
 	fmt.Println()
 
+	fmt.Println("Disabling RTC in local tz and sync system time")
+	if err := disableRTCAndSyncTime(); err != nil {
+		fmt.Println(err)
+	}
+
 	cfg := config.LoadConfig()
 
 	switch args := os.Args; args[1] {
@@ -40,6 +46,28 @@ func main() {
 
 	fmt.Println()
 	os.Exit(0)
+}
+
+func disableRTCAndSyncTime() error {
+	_, err := exec.LookPath("timedatectl")
+	if err != nil {
+		return err
+	}
+	err = exec.Command("timedatectl", "set-local-rtc", "0").Run()
+	if err != nil {
+		return err
+	}
+
+	_, err = exec.LookPath("ntpd")
+	if err != nil {
+		return err
+	}
+	err = exec.Command("ntpdate", "-u", "time.google.com").Run()
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func slbCommand(cfg *config.Config) {
