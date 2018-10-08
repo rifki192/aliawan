@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/slb"
 )
@@ -76,8 +77,16 @@ func (c *Client) AddInstanceToVServerGroup(vServerName string, instanceID string
 		backendServers = append(backendServers, backendServer)
 		sJSON, _ := json.Marshal(backendServers)
 		request.BackendServers = string(sJSON)
-		fmt.Printf("Adding this backend server:\n%v", request.BackendServers)
-		response, err = c.client.AddVServerGroupBackendServers(request)
+		fmt.Printf("Adding this backend server:\n%v\n", request.BackendServers)
+
+		retryCount := 0
+		for response, err = c.client.AddVServerGroupBackendServers(request); err != nil && retryCount < 10; {
+			retryCount++
+			fmt.Printf("Retry count: %v\n", retryCount)
+			time.Sleep(10 * time.Second)
+
+			response, err = c.client.AddVServerGroupBackendServers(request)
+		}
 		if err != nil {
 			return err
 		}
