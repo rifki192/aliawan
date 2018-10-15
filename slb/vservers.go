@@ -77,7 +77,7 @@ func (c *Client) AddInstanceToVServerGroup(vServerName string, instanceID string
 		backendServers = append(backendServers, backendServer)
 		sJSON, _ := json.Marshal(backendServers)
 		request.BackendServers = string(sJSON)
-		fmt.Printf("Adding this backend server:\n%v\n", request.BackendServers)
+		fmt.Printf("Adding this backend server: %v\n", request.BackendServers)
 
 		retryCount := 0
 		for response, err = c.client.AddVServerGroupBackendServers(request); err != nil && retryCount < 10; {
@@ -91,7 +91,7 @@ func (c *Client) AddInstanceToVServerGroup(vServerName string, instanceID string
 			return err
 		}
 		if response.IsSuccess() {
-			fmt.Printf("Instance %s success added to %s with name %s.\n", instanceID, vg, vServerName)
+			fmt.Printf("Instance [%s] successfully added to %s vgroup (%s).\n", instanceID, vServerName, vg)
 		}
 	}
 

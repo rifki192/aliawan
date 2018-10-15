@@ -126,24 +126,24 @@ func imagesCommand(cfg *config.Config) {
 	essClient := ess.New(cfg)
 	err = essClient.ReplaceScalingConfigurationsWithImageId(oldImageID, newImageID)
 	if err != nil {
-		fmt.Printf("Error while replacing scaling group config %v \n", err)
+		fmt.Printf("Error while replacing scaling group config %v\n", err)
 		os.Exit(1)
 	}
-	fmt.Printf("All feature using image %s (%s) has been replaced to use image %s (%s) \n", *flagOldName, oldImageID, *flagNewName, newImageID)
+	fmt.Printf("All feature using image %s (%s) has been replaced to use image %s (%s)\n", *flagOldName, oldImageID, *flagNewName, newImageID)
 
 	fmt.Println("Change new image name, to become old image name")
 
 	if oldImageID != "" {
 		err = ecsClient.ChangeImageName(oldImageID, *flagOldName+"tmp")
 		if err != nil {
-			fmt.Printf("Error while change old image name %v \n", err)
+			fmt.Printf("Error while change old image name %v\n", err)
 			os.Exit(1)
 		}
 	}
 
 	err = ecsClient.ChangeImageName(newImageID, *flagOldName)
 	if err != nil {
-		fmt.Printf("Error while change new image name %v \n", err)
+		fmt.Printf("Error while change new image name %v\n", err)
 		os.Exit(1)
 	}
 
@@ -151,7 +151,7 @@ func imagesCommand(cfg *config.Config) {
 		fmt.Println("Delete Old Image Defined, will delete old image...")
 		err = ecsClient.DeleteImageByID(oldImageID)
 		if err != nil {
-			fmt.Printf("Error while deleting old image %v \n", err)
+			fmt.Printf("Error while deleting old image %v\n", err)
 			os.Exit(1)
 		}
 	}
