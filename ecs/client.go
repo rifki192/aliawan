@@ -5,7 +5,7 @@ import (
 
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/auth/credentials"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/ecs"
-	"github.com/williamchanrico/alicloud-image-overwriter/config"
+	"github.com/rifki192/alicloud-image-overwriter/config"
 )
 
 type Client struct {

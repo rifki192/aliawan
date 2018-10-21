@@ -5,7 +5,7 @@ import (
 
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk"
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/slb"
-	"github.com/williamchanrico/alicloud-image-overwriter/config"
+	"github.com/rifki192/alicloud-image-overwriter/config"
 
 	"github.com/aliyun/alibaba-cloud-sdk-go/sdk/auth/credentials"
 )
