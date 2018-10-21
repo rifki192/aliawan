@@ -65,7 +65,7 @@ func slbCommand(cfg *config.Config) {
 	slbClient := slb.New(cfg)
 	err = slbClient.AddInstanceToVServerGroup(*flagVGroups, *flagInstanceID)
 	if err != nil {
-		log.Printf("could not send request AddVServerGroupBackendServers to alibaba: %v\n", err)
+		log.Printf("could not send request AddInstanceToVServerGroup to alibaba: %v\n", err)
 		os.Exit(1)
 	}
 }
