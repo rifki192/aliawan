@@ -26,11 +26,6 @@ func main() {
 	fmt.Println("=================================================")
 	fmt.Println()
 
-	fmt.Println("Disabling RTC in local tz and sync system time")
-	if err := disableRTCAndSyncTime(); err != nil {
-		fmt.Println(err)
-	}
-
 	cfg := config.LoadConfig()
 
 	switch args := os.Args; args[1] {
@@ -71,6 +66,11 @@ func disableRTCAndSyncTime() error {
 }
 
 func slbCommand(cfg *config.Config) {
+	fmt.Println("Disabling RTC in local tz and sync system time")
+	if err := disableRTCAndSyncTime(); err != nil {
+		fmt.Println(err)
+	}
+
 	var err error
 	// Subcommands
 	slbCmd := flag.NewFlagSet("slb", flag.ExitOnError)
