@@ -17,7 +17,8 @@ func (c *Client) ReplaceScalingConfigurationsWithImageId(oldImageID string, newI
 	scList := getScalingConfigurationsByImageID(c, oldImageID)
 
 	if len(scList) == 0 {
-		fmt.Printf("Can not found any resources using this image %s", oldImageID)
+		fmt.Printf("Can not find any resource using this image: %s\n", oldImageID)
+		return nil
 	}
 
 	for _, item := range scList {

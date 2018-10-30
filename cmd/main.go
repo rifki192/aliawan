@@ -22,6 +22,7 @@ func main() {
 	fmt.Println("======    ALIBABA CLOUD CLI WRAPPER      ========")
 	fmt.Println("======  another un-official alicloud-cli ========")
 	fmt.Println("======      to simplify your task        ========")
+	fmt.Println("====== v1.0                              ========")
 	fmt.Println("=================================================")
 	fmt.Println()
 
@@ -134,7 +135,7 @@ func imagesCommand(cfg *config.Config) {
 	fmt.Println("Change new image name, to become old image name")
 
 	if oldImageID != "" {
-		err = ecsClient.ChangeImageName(oldImageID, *flagOldName+"tmp")
+		err = ecsClient.ChangeImageName(oldImageID, *flagOldName+"-should-be-deleted")
 		if err != nil {
 			fmt.Printf("Error while change old image name %v\n", err)
 			os.Exit(1)
