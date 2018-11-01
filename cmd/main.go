@@ -22,7 +22,7 @@ func main() {
 	fmt.Println("======    ALIBABA CLOUD CLI WRAPPER      ========")
 	fmt.Println("======  another un-official alicloud-cli ========")
 	fmt.Println("======      to simplify your task        ========")
-	fmt.Println("====== v1.0                              ========")
+	fmt.Println("====== v1.3                              ========")
 	fmt.Println("=================================================")
 	fmt.Println()
 
@@ -132,16 +132,24 @@ func imagesCommand(cfg *config.Config) {
 	}
 	fmt.Printf("All feature using image %s (%s) has been replaced to use image %s (%s)\n", *flagOldName, oldImageID, *flagNewName, newImageID)
 
-	fmt.Println("Change new image name, to become old image name")
+	fmt.Println("Deleting junk image...")
+	junkImageNameSuffix := "-should-be-deleted"
+	junkImageID := ecsClient.GetImageIdByName(*flagOldName + junkImageNameSuffix)
+	err = ecsClient.DeleteImageByID(junkImageID)
+	if err != nil {
+		fmt.Printf("Looks like there's no junk images: %v\n", err)
+	}
 
 	if oldImageID != "" {
-		err = ecsClient.ChangeImageName(oldImageID, *flagOldName+"-should-be-deleted")
+		fmt.Println("Changing old image name to junk name")
+		err = ecsClient.ChangeImageName(oldImageID, *flagOldName+junkImageNameSuffix)
 		if err != nil {
 			fmt.Printf("Error while change old image name %v\n", err)
 			os.Exit(1)
 		}
 	}
 
+	fmt.Println("Change new image name, to become old image name")
 	err = ecsClient.ChangeImageName(newImageID, *flagOldName)
 	if err != nil {
 		fmt.Printf("Error while change new image name %v\n", err)
